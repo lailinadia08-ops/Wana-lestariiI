@@ -1,0 +1,618 @@
+<title>Wana Lestari</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+/* Layout: sidebar modul di kiri (menjadi bilah geser di atas pada ponsel), area kerja di kanan. Kesan: lembar survei lapangan dengan garis kontur topografi. */
+:root{
+  --bg:#ECF0EA; --surface:#F8FAF6; --ink:#14231B; --muted:#5A6D61; --line:#CCD7CE;
+  --accent:#1D6A4C; --accent-ink:#FFFFFF; --accent-soft:#D9EBE1;
+  --amber:#9A6007; --amber-soft:#F3E6C8;
+  --bad:#B03A2A; --bad-soft:#F4D9D3;
+  --info:#2B5F8A; --info-soft:#D8E5F0;
+  --side:#14382A; --side-ink:#E6F0E9; --side-muted:#9DBBAA; --side-line:rgba(230,240,233,.09); --side-active:#1F5039;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1813; --surface:#15231C; --ink:#E3EDE6; --muted:#93A89B; --line:#24372D;
+    --accent:#5CC796; --accent-ink:#06150D; --accent-soft:#17382A;
+    --amber:#E3AC45; --amber-soft:#3A2D12;
+    --bad:#EE8A78; --bad-soft:#3E1D17;
+    --info:#79B2E0; --info-soft:#15293A;
+    --side:#0A130F; --side-ink:#DDE9E1; --side-muted:#7F9A8A; --side-line:rgba(221,233,225,.07); --side-active:#16291F;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1813; --surface:#15231C; --ink:#E3EDE6; --muted:#93A89B; --line:#24372D;
+  --accent:#5CC796; --accent-ink:#06150D; --accent-soft:#17382A;
+  --amber:#E3AC45; --amber-soft:#3A2D12;
+  --bad:#EE8A78; --bad-soft:#3E1D17;
+  --info:#79B2E0; --info-soft:#15293A;
+  --side:#0A130F; --side-ink:#DDE9E1; --side-muted:#7F9A8A; --side-line:rgba(221,233,225,.07); --side-active:#16291F;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5}
+h1,h2,h3,p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100%}
+/* sidebar */
+.side{background:var(--side);color:var(--side-ink);align-self:start;position:sticky;top:env(safe-area-inset-top,0px);max-height:100vh;overflow:auto;display:flex;flex-direction:column}
+.brand{padding:22px max(20px,env(safe-area-inset-left,0px)) 22px;background:repeating-radial-gradient(circle at 115% 125%,transparent 0 15px,var(--side-line) 15px 16px);border-bottom:1px solid var(--side-line)}
+.brand h1{font-family:var(--f-display);font-weight:700;font-size:25px;letter-spacing:-.01em;line-height:1.05}
+.brand p{color:var(--side-muted);font-size:12px;margin-top:6px;max-width:20ch}
+.nav{display:flex;flex-direction:column;gap:2px;padding:12px 10px}
+.nav a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;border-radius:6px;color:var(--side-ink);text-decoration:none;font-weight:500;white-space:nowrap}
+.nav a:hover{background:var(--side-active)}
+.nav a[aria-current="page"]{background:var(--side-active);box-shadow:inset 3px 0 0 var(--accent)}
+.nav .c{font-family:var(--f-mono);font-size:11px;color:var(--side-muted)}
+.side-foot{margin-top:auto;padding:16px max(20px,env(safe-area-inset-left,0px)) 20px;border-top:1px solid var(--side-line);font-size:12px;color:var(--side-muted);display:flex;flex-direction:column;gap:10px}
+/* main */
+.main{padding-block:28px 56px;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px));min-width:0}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px;margin-bottom:22px}
+.head h2{font-family:var(--f-display);font-weight:700;font-size:30px;letter-spacing:-.015em;line-height:1.1;text-wrap:balance}
+.head p{color:var(--muted);max-width:62ch;margin-top:6px}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:8px 14px;cursor:pointer;font-weight:500}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.sm{padding:4px 10px;font-size:12px}
+.btn.danger.armed{background:var(--bad);color:var(--surface);border-color:var(--bad)}
+.btn.ghost{background:transparent;border-color:var(--side-line);color:var(--side-ink)}
+.btn.ghost.armed{background:var(--bad);border-color:var(--bad);color:#fff}
+/* dashboard */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kl{font-size:12px;color:var(--muted)}
+.kv{font-family:var(--f-display);font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums}
+.kv small{font-family:var(--f-body);font-size:13px;font-weight:500;color:var(--muted);letter-spacing:0}
+.ks{font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;min-width:0}
+.card h3{font-size:15px;font-weight:600}
+.card .sub{color:var(--muted);font-size:12px;margin:2px 0 14px}
+.months{display:flex;align-items:flex-end;gap:4px;height:176px;border-bottom:1px solid var(--line)}
+.mcol{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:3px}
+.mcol span{font-family:var(--f-mono);font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.mcol i{display:block;width:100%;max-width:26px;background:var(--accent);border-radius:3px 3px 0 0;min-height:0}
+.mlabels{display:flex;gap:4px;margin-top:5px}
+.mlabels span{flex:1;text-align:center;font-family:var(--f-mono);font-size:10px;color:var(--muted)}
+.hbar{display:grid;gap:12px}
+.hrow .t{display:flex;justify-content:space-between;gap:12px;font-size:13px}
+.hrow .t b{font-weight:600}
+.hrow .t span{font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.track{height:8px;background:var(--accent-soft);border-radius:4px;margin-top:5px;overflow:hidden}
+.track i{display:block;height:100%;border-radius:4px;background:var(--accent)}
+.track i.amb{background:var(--amber)} .track i.bad{background:var(--bad)} .track i.ok{background:var(--accent)}
+.phl-top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.phl-top b{font-family:var(--f-display);font-size:44px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.phl-top em{font-style:normal;font-size:13px;color:var(--muted)}
+.crit{display:grid;gap:13px}
+.crit .d{font-size:12px;color:var(--muted)}
+.note{font-size:12px;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.attn{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.attn li{display:flex;gap:10px;align-items:flex-start}
+.attn a{color:var(--ink);text-decoration:none;flex:1;min-width:0}
+.attn a:hover{text-decoration:underline}
+.dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none;background:var(--amber)}
+.dot.bad{background:var(--bad)}
+/* toolbar + table */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
+.toolbar input[type=search]{flex:1 1 220px;min-width:0}
+.field,.toolbar input,.toolbar select,.fgrid input,.fgrid select,.fgrid textarea{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%}
+.toolbar select{width:auto;min-width:160px}
+.summary{font-size:13px;color:var(--muted);margin-bottom:10px;font-variant-numeric:tabular-nums}
+.summary b{color:var(--ink);font-weight:600}
+.tw{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--bg)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.n{font-family:var(--f-mono);font-size:12.5px}
+td.wrap{min-width:220px;color:var(--muted)}
+td.act{white-space:nowrap;text-align:right}
+td.act .btn+.btn{margin-left:6px}
+.u{color:var(--muted);font-size:11px}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:500;white-space:nowrap;background:var(--accent-soft);color:var(--accent)}
+.badge.amb{background:var(--amber-soft);color:var(--amber)}
+.badge.bad{background:var(--bad-soft);color:var(--bad)}
+.badge.info{background:var(--info-soft);color:var(--info)}
+.prog{display:flex;align-items:center;gap:8px;min-width:130px}
+.prog .bar{flex:1;height:7px;background:var(--accent-soft);border-radius:4px;overflow:hidden}
+.prog .bar i{display:block;height:100%;background:var(--accent)}
+.prog .bar i.amb{background:var(--amber)} .prog .bar i.bad{background:var(--bad)}
+.prog b{font-family:var(--f-mono);font-size:12px;font-weight:500;width:44px;text-align:right}
+.empty{padding:34px 16px;text-align:center;color:var(--muted)}
+/* form sheet */
+.sheet{position:fixed;inset:0;z-index:20;display:flex;justify-content:flex-end}
+.sheet-bg{position:absolute;inset:0;background:rgba(8,16,12,.55)}
+.panel{position:relative;width:min(460px,100%);height:100%;overflow:auto;background:var(--bg);border-left:1px solid var(--line);padding-top:calc(22px + env(safe-area-inset-top,0px));padding-bottom:calc(22px + env(safe-area-inset-bottom,0px));padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.panel h2{font-family:var(--f-display);font-size:22px;font-weight:700}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fgrid .full{grid-column:1/-1}
+.fgrid label{display:block;font-size:12px;font-weight:500;margin-bottom:5px}
+.fgrid label i{color:var(--bad);font-style:normal}
+.fgrid textarea{min-height:72px;resize:vertical}
+.err{color:var(--bad);font-size:13px;min-height:1em}
+.factions{display:flex;gap:10px;justify-content:flex-end;margin-top:auto}
+@media (max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:static;max-height:none;overflow:visible}
+  .brand{padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .brand p{max-width:none}
+  .nav{flex-direction:row;overflow-x:auto;padding-block:8px;padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+  .nav a{gap:8px}
+  .side-foot{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}
+  .main{padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .head h2{font-size:25px}
+  .fgrid{grid-template-columns:1fr}
+  .panel{border-left:0}
+}
+@media (prefers-reduced-motion:no-preference){
+  .track i,.prog .bar i,.mcol i{transition:height .3s ease,width .3s ease}
+}
+</style>
+
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <h1>Wana Lestari</h1>
+      <p>Sistem informasi HHBK dan pengelolaan hutan</p>
+    </div>
+    <nav class="nav" id="nav" aria-label="Modul"></nav>
+    <div class="side-foot">
+      <span id="storeNote"></span>
+      <button class="btn ghost sm" type="button" data-act="reset" id="resetBtn">Kembalikan data contoh</button>
+    </div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<div id="sheet" class="sheet" hidden>
+  <div class="sheet-bg" data-act="close"></div>
+  <form id="form" class="panel" novalidate aria-labelledby="ftitle">
+    <h2 id="ftitle"></h2>
+    <div id="fbody" class="fgrid"></div>
+    <p id="ferr" class="err" role="alert"></p>
+    <div class="factions">
+      <button type="button" class="btn" data-act="close">Batal</button>
+      <button type="submit" class="btn pri">Simpan</button>
+    </div>
+  </form>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var BULAN=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+var KEY='wana-lestari-v1';
+
+/* ---------- util ---------- */
+function $(s,r){return (r||document).querySelector(s);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+var nfm=new Intl.NumberFormat('id-ID',{maximumFractionDigits:1});
+var nf0=new Intl.NumberFormat('id-ID',{maximumFractionDigits:0});
+function nf(n){return nfm.format(n);}
+function rp(n){return 'Rp '+nf0.format(n);}
+function jt(n){return nfm.format(n/1e6);}
+function sum(a,f){return a.reduce(function(s,r){return s+(+(typeof f==='function'?f(r):r[f])||0);},0);}
+var uid=0;
+function newId(){uid++;return 'r'+Date.now().toString(36)+uid;}
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function dayOff(o){var d=new Date();d.setDate(d.getDate()+o);return ymd(d);}
+function daysUntil(s){
+  var p=String(s).split('-').map(Number);
+  var t=new Date();t.setHours(0,0,0,0);
+  return Math.round((new Date(p[0],p[1]-1,p[2])-t)/864e5);
+}
+function fmtDate(s){
+  if(!s)return '';
+  var p=String(s).split('-').map(Number);
+  return p[2]+' '+BULAN[p[1]-1]+' '+p[0];
+}
+function tonePct(p){return p>=75?'ok':(p>=50?'amb':'bad');}
+var TONES={Terjual:'ok',Diolah:'info',Dipanen:'amb',Baik:'ok',Sedang:'amb',Terdegradasi:'bad',
+  Rendah:'ok',Tinggi:'bad',Selesai:'ok',Ditangani:'info',Dilaporkan:'amb',
+  Terbit:'ok',Evaluasi:'info',Pengajuan:'amb','Verifikasi Teknis':'amb',Penetapan:'info',A:'ok',B:'amb',C:'bad'};
+function badge(v){return '<span class="badge '+(TONES[v]||'info')+'">'+esc(v)+'</span>';}
+
+/* ---------- data contoh ---------- */
+function seed(){
+  var d={
+    hhbk:[
+      ['Madu hutan','KUPS Madu Rimba','Blok A-02','Mar',420,95000,'A','Terjual'],
+      ['Madu hutan','KUPS Madu Rimba','Blok A-02','Mei',510,98000,'A','Terjual'],
+      ['Madu hutan','KUPS Madu Rimba','Blok A-04','Agu',380,102000,'B','Diolah'],
+      ['Rotan','KUPS Rotan Lestari','Blok B-05','Feb',2600,6500,'B','Terjual'],
+      ['Rotan','KUPS Rotan Lestari','Blok B-05','Apr',3100,6800,'A','Terjual'],
+      ['Rotan','KUPS Rotan Lestari','Blok B-06','Jul',2800,7000,'B','Dipanen'],
+      ['Gaharu','KUPS Gaharu Mandiri','Blok C-01','Jun',38,1850000,'A','Terjual'],
+      ['Gaharu','KUPS Gaharu Mandiri','Blok C-01','Okt',22,1700000,'B','Diolah'],
+      ['Getah jelutung','KUPS Jelutung Makmur','Blok B-09','Jan',1500,24000,'B','Terjual'],
+      ['Getah jelutung','KUPS Jelutung Makmur','Blok B-09','Mar',1750,25000,'A','Terjual'],
+      ['Damar','KUPS Damar Bersama','Blok D-03','Mei',900,18000,'B','Terjual'],
+      ['Damar','KUPS Damar Bersama','Blok D-03','Sep',1200,19000,'A','Dipanen']
+    ].map(function(a){return {komoditas:a[0],kups:a[1],petak:a[2],bulan:a[3],volume:a[4],harga:a[5],mutu:a[6],status:a[7]};}),
+    kawasan:[
+      ['Blok A','Hutan Produksi Terbatas',1850,82,'Baik','KPH Model Contoh'],
+      ['Blok B','Hutan Produksi',2400,68,'Sedang','KPH Model Contoh'],
+      ['Blok C','Hutan Lindung',3100,91,'Baik','KPH Model Contoh'],
+      ['Blok D','Hutan Produksi',1600,54,'Terdegradasi','KPH Model Contoh'],
+      ['Blok E','Hutan Produksi Terbatas',900,76,'Sedang','KPH Model Contoh'],
+      ['Blok F','Hutan Lindung',2200,73,'Sedang','KPH Model Contoh']
+    ].map(function(a){return {nama:a[0],fungsi:a[1],luas:a[2],tutupan:a[3],kondisi:a[4],pengelola:a[5]};}),
+    rencana:[
+      ['Panen madu hutan','Produksi',1500,1310,'kg','KUPS Madu Rimba'],
+      ['Panen rotan','Produksi',9000,8500,'kg','KUPS Rotan Lestari'],
+      ['Penyadapan getah jelutung','Produksi',4000,3250,'kg','KUPS Jelutung Makmur'],
+      ['Penanaman pengayaan','Rehabilitasi',120,78,'ha','Seksi Rehabilitasi'],
+      ['Pemeliharaan tanaman','Rehabilitasi',200,150,'ha','Seksi Rehabilitasi'],
+      ['Patroli rutin','Perlindungan',48,36,'kali','Resor Pengamanan'],
+      ['Pembuatan sekat kanal','Perlindungan',12,5,'unit','Resor Pengamanan'],
+      ['Pelatihan kelompok usaha','Pemberdayaan',10,7,'kali','Seksi Pemberdayaan'],
+      ['Pendampingan usaha','Pemberdayaan',6,5,'KUPS','Seksi Pemberdayaan']
+    ].map(function(a){return {kegiatan:a[0],kategori:a[1],target:a[2],realisasi:a[3],satuan:a[4],pj:a[5]};}),
+    izin:[
+      ['PS-HKm-014','Kelompok Tani Hutan Sejahtera','Hutan Kemasyarakatan',320,'Verifikasi Teknis',14,'Menunggu peta definitif dari kelompok.'],
+      ['PS-HD-007','Lembaga Pengelola Hutan Desa Contoh','Hutan Desa',1250,'Terbit',120,'Rencana pengelolaan lima tahun sudah disahkan.'],
+      ['PBPH-022','Unit Usaha Wana Contoh','PBPH',8400,'Evaluasi',9,'Laporan evaluasi triwulan perlu dilengkapi.'],
+      ['HTR-031','Koperasi Tani Mandiri','Hutan Tanaman Rakyat',210,'Pengajuan',-3,'Berkas permohonan belum lengkap.'],
+      ['KK-005','Kelompok Warga Hutan Contoh','Kemitraan Kehutanan',450,'Penetapan',32,'Naskah kemitraan sedang ditelaah.']
+    ].map(function(a){return {nomor:a[0],pemegang:a[1],jenis:a[2],luas:a[3],tahap:a[4],tenggat:dayOff(a[5]),catatan:a[6]};}),
+    patroli:[
+      [-2,'Kebakaran hutan','Blok D-03','Tinggi','Ditangani','Titik api terpantau, regu pemadam di lokasi.'],
+      [-5,'Perambahan','Blok B-07','Sedang','Dilaporkan','Pembukaan lahan sekitar 2 ha di tepi jalan angkut.'],
+      [-9,'Pembalakan liar','Blok A-11','Tinggi','Dilaporkan','Ditemukan tunggul baru dan jejak sarana angkut.'],
+      [-14,'Pohon tumbang','Blok C-02','Rendah','Selesai','Jalur patroli sudah dibersihkan.'],
+      [-20,'Perburuan satwa','Blok F-04','Sedang','Selesai','Jerat diamankan, warga sekitar diberi penyuluhan.'],
+      [-27,'Kebakaran hutan','Blok D-01','Rendah','Selesai','Api padam, bekas terbakar dipantau.']
+    ].map(function(a){return {tanggal:dayOff(a[0]),jenis:a[1],lokasi:a[2],tingkat:a[3],status:a[4],ket:a[5]};})
+  };
+  Object.keys(d).forEach(function(k){d[k].forEach(function(r){r.id=newId();});});
+  return d;
+}
+
+/* ---------- penyimpanan ---------- */
+var persisted=true;
+function loadDb(){
+  try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.hhbk&&o.kawasan&&o.rencana&&o.izin&&o.patroli)return o;}}catch(e){persisted=false;}
+  return null;
+}
+function saveDb(){
+  try{localStorage.setItem(KEY,JSON.stringify(db));persisted=true;}catch(e){persisted=false;}
+  storeNote();
+}
+var db=loadDb()||seed();
+try{localStorage.setItem(KEY+'-t','1');localStorage.removeItem(KEY+'-t');}catch(e){persisted=false;}
+
+/* ---------- skema modul ---------- */
+var E={
+  hhbk:{label:'HHBK',title:'Hasil hutan bukan kayu',add:'Tambah catatan panen',
+    desc:'Catat panen, mutu, dan nilai jual madu, rotan, gaharu, getah, dan komoditas lain dari kelompok pengelola.',
+    filter:'komoditas',
+    sort:function(a,b){return BULAN.indexOf(a.bulan)-BULAN.indexOf(b.bulan);},
+    fields:[
+      {k:'komoditas',l:'Komoditas',t:'text',req:1,tbl:1,list:['Madu hutan','Rotan','Gaharu','Getah jelutung','Damar','Bambu','Kemiri']},
+      {k:'kups',l:'Kelompok (KUPS)',t:'text',req:1,tbl:1},
+      {k:'petak',l:'Petak atau blok',t:'text',tbl:1},
+      {k:'bulan',l:'Bulan panen',t:'select',opts:BULAN,tbl:1},
+      {k:'volume',l:'Volume (kg)',t:'number',req:1,tbl:1,fmt:'num'},
+      {k:'harga',l:'Harga per kg (Rp)',t:'number',req:1,tbl:1,fmt:'rp'},
+      {k:'mutu',l:'Mutu',t:'select',opts:['A','B','C'],tbl:1,fmt:'badge'},
+      {k:'status',l:'Status',t:'select',opts:['Dipanen','Diolah','Terjual'],tbl:1,fmt:'badge'}
+    ],
+    comp:[{l:'Nilai',n:1,fn:function(r){return rp(r.volume*r.harga);}}],
+    summary:function(rows){return '<b>'+rows.length+'</b> catatan, <b>'+nf(sum(rows,'volume'))+'</b> kg, nilai <b>'+rp(sum(rows,function(r){return r.volume*r.harga;}))+'</b>';}
+  },
+  kawasan:{label:'Kawasan hutan',title:'Kawasan hutan',add:'Tambah blok',
+    desc:'Daftar blok pengelolaan beserta fungsi, luas, tutupan, dan kondisi hutannya.',
+    filter:'fungsi',
+    fields:[
+      {k:'nama',l:'Nama blok',t:'text',req:1,tbl:1},
+      {k:'fungsi',l:'Fungsi kawasan',t:'select',opts:['Hutan Produksi','Hutan Produksi Terbatas','Hutan Lindung','Hutan Konservasi'],tbl:1},
+      {k:'luas',l:'Luas (ha)',t:'number',req:1,tbl:1,fmt:'num'},
+      {k:'tutupan',l:'Tutupan hutan (%)',t:'number',max:100,req:1,tbl:1,fmt:'pct'},
+      {k:'kondisi',l:'Kondisi',t:'select',opts:['Baik','Sedang','Terdegradasi'],tbl:1,fmt:'badge'},
+      {k:'pengelola',l:'Pengelola',t:'text',tbl:1}
+    ],
+    summary:function(rows){return '<b>'+rows.length+'</b> blok, luas <b>'+nf(sum(rows,'luas'))+'</b> ha';}
+  },
+  rencana:{label:'Rencana kerja',title:'Rencana kerja tahunan',add:'Tambah kegiatan',
+    desc:'Target dan realisasi kegiatan produksi, rehabilitasi, perlindungan, dan pemberdayaan. Capaian dihitung otomatis.',
+    filter:'kategori',
+    fields:[
+      {k:'kegiatan',l:'Kegiatan',t:'text',req:1,tbl:1,full:1},
+      {k:'kategori',l:'Kategori',t:'select',opts:['Produksi','Rehabilitasi','Perlindungan','Pemberdayaan'],tbl:1},
+      {k:'satuan',l:'Satuan',t:'text',req:1,tbl:1},
+      {k:'target',l:'Target',t:'number',req:1,tbl:1,fmt:'num'},
+      {k:'realisasi',l:'Realisasi',t:'number',req:1,tbl:1,fmt:'num'},
+      {k:'pj',l:'Penanggung jawab',t:'text',tbl:1}
+    ],
+    order:['kegiatan','kategori','target','realisasi','satuan','pj'],
+    comp:[{l:'Capaian',fn:function(r){var p=r.target>0?r.realisasi/r.target*100:0;return '<div class="prog"><span class="bar"><i class="'+tonePct(p)+'" style="width:'+Math.min(100,p)+'%"></i></span><b>'+nf(p)+'%</b></div>';}}],
+    summary:function(rows){var s=rows.length?rows.reduce(function(a,r){return a+(r.target>0?Math.min(100,r.realisasi/r.target*100):0);},0)/rows.length:0;return '<b>'+rows.length+'</b> kegiatan, rata-rata capaian <b>'+nf(s)+'%</b>';}
+  },
+  izin:{label:'Perizinan',title:'Perizinan dan pengurusan hutan',add:'Tambah izin',
+    desc:'Pantau tahapan izin pemanfaatan hutan dan perhutanan sosial, lengkap dengan tenggat tindak lanjut.',
+    filter:'tahap',
+    sort:function(a,b){return String(a.tenggat).localeCompare(String(b.tenggat));},
+    fields:[
+      {k:'nomor',l:'Nomor izin',t:'text',req:1,tbl:1},
+      {k:'pemegang',l:'Pemegang izin',t:'text',req:1,tbl:1},
+      {k:'jenis',l:'Jenis',t:'select',opts:['PBPH','Hutan Kemasyarakatan','Hutan Desa','Hutan Tanaman Rakyat','Kemitraan Kehutanan'],tbl:1},
+      {k:'luas',l:'Luas (ha)',t:'number',req:1,tbl:1,fmt:'num'},
+      {k:'tahap',l:'Tahapan',t:'select',opts:['Pengajuan','Verifikasi Teknis','Penetapan','Terbit','Evaluasi'],tbl:1,fmt:'badge'},
+      {k:'tenggat',l:'Tenggat tindak lanjut',t:'date',req:1,tbl:1,fmt:'date'},
+      {k:'catatan',l:'Catatan',t:'textarea',full:1}
+    ],
+    comp:[{l:'Sisa waktu',fn:function(r){var d=daysUntil(r.tenggat);var c=d<0?'bad':(d<=14?'amb':'ok');return '<span class="badge '+c+'">'+(d<0?'Lewat '+(-d)+' hari':(d===0?'Hari ini':d+' hari lagi'))+'</span>';}}],
+    summary:function(rows){return '<b>'+rows.length+'</b> izin, luas <b>'+nf(sum(rows,'luas'))+'</b> ha';}
+  },
+  patroli:{label:'Pengamanan',title:'Pengamanan dan gangguan hutan',add:'Catat kejadian',
+    desc:'Laporan patroli dan kejadian di lapangan: kebakaran, perambahan, pembalakan liar, dan gangguan lain.',
+    filter:'status',
+    sort:function(a,b){return String(b.tanggal).localeCompare(String(a.tanggal));},
+    fields:[
+      {k:'tanggal',l:'Tanggal',t:'date',req:1,tbl:1,fmt:'date'},
+      {k:'jenis',l:'Jenis kejadian',t:'select',opts:['Kebakaran hutan','Perambahan','Pembalakan liar','Perburuan satwa','Pohon tumbang'],tbl:1},
+      {k:'lokasi',l:'Lokasi (blok atau petak)',t:'text',req:1,tbl:1},
+      {k:'tingkat',l:'Tingkat',t:'select',opts:['Rendah','Sedang','Tinggi'],tbl:1,fmt:'badge'},
+      {k:'status',l:'Status',t:'select',opts:['Dilaporkan','Ditangani','Selesai'],tbl:1,fmt:'badge'},
+      {k:'ket',l:'Keterangan',t:'textarea',tbl:1,full:1,wrap:1}
+    ],
+    summary:function(rows){return '<b>'+rows.length+'</b> laporan, <b>'+rows.filter(function(r){return r.status!=='Selesai';}).length+'</b> belum selesai';}
+  }
+};
+var ORDER=['hhbk','kawasan','rencana','izin','patroli'];
+var ui={view:'dasbor',hhbk:{q:'',f:''},kawasan:{q:'',f:''},rencana:{q:'',f:''},izin:{q:'',f:''},patroli:{q:'',f:''}};
+
+/* ---------- navigasi ---------- */
+function nav(){
+  var items=[['dasbor','Ringkasan',null]].concat(ORDER.map(function(k){return [k,E[k].label,db[k].length];}));
+  $('#nav').innerHTML=items.map(function(i){
+    return '<a href="#'+i[0]+'"'+(ui.view===i[0]?' aria-current="page"':'')+'><span>'+esc(i[1])+'</span>'+(i[2]==null?'':'<span class="c">'+i[2]+'</span>')+'</a>';
+  }).join('');
+}
+function storeNote(){
+  $('#storeNote').textContent=persisted?'Data contoh untuk peragaan. Perubahan tersimpan di peramban ini.':'Penyimpanan peramban tidak tersedia. Perubahan hilang saat halaman ditutup.';
+}
+
+/* ---------- ringkasan ---------- */
+function pctRow(r){return r.target>0?Math.min(100,r.realisasi/r.target*100):0;}
+function avgCat(c){var a=db.rencana.filter(function(r){return r.kategori===c;});return a.length?a.reduce(function(s,r){return s+pctRow(r);},0)/a.length:null;}
+function mean(arr){var a=arr.filter(function(x){return x!=null;});return a.length?a.reduce(function(s,x){return s+x;},0)/a.length:null;}
+function dashHTML(){
+  var h=db.hhbk,vol=sum(h,'volume'),nilai=sum(h,function(r){return r.volume*r.harga;}),luas=sum(db.kawasan,'luas');
+  var tut=luas?sum(db.kawasan,function(r){return r.tutupan*r.luas;})/luas:null;
+  var done=db.patroli.length?db.patroli.filter(function(r){return r.status==='Selesai';}).length/db.patroli.length*100:null;
+  var crit=[
+    {n:'Produksi lestari',v:avgCat('Produksi'),d:'Rata-rata capaian rencana panen'},
+    {n:'Kondisi ekologi',v:mean([tut,avgCat('Rehabilitasi')]),d:'Tutupan hutan berbobot luas dan capaian rehabilitasi'},
+    {n:'Perlindungan',v:mean([avgCat('Perlindungan'),done]),d:'Capaian patroli dan kejadian yang sudah selesai'},
+    {n:'Sosial dan ekonomi',v:avgCat('Pemberdayaan'),d:'Capaian pemberdayaan kelompok usaha'}
+  ];
+  var idx=mean(crit.map(function(c){return c.v;}));
+  var idxLabel=idx==null?'Belum ada data':(idx>=75?'Baik':(idx>=55?'Perlu ditingkatkan':'Perlu perhatian segera'));
+
+  var perBulan=BULAN.map(function(b){return sum(h.filter(function(r){return r.bulan===b;}),function(r){return r.volume*r.harga;});});
+  var mx=Math.max.apply(null,perBulan.concat([1]));
+  var months='<div class="months" role="img" aria-label="Nilai produksi HHBK per bulan, dalam juta rupiah">'+perBulan.map(function(v){
+    return '<div class="mcol"><span>'+(v>0?jt(v):'')+'</span><i style="height:'+(v/mx*132)+'px"></i></div>';
+  }).join('')+'</div><div class="mlabels">'+BULAN.map(function(b){return '<span>'+b+'</span>';}).join('')+'</div>';
+
+  var km={};h.forEach(function(r){var o=km[r.komoditas]||(km[r.komoditas]={v:0,n:0});o.v+=r.volume;o.n+=r.volume*r.harga;});
+  var kl=Object.keys(km).sort(function(a,b){return km[b].n-km[a].n;});
+  var kmax=Math.max.apply(null,kl.map(function(k){return km[k].n;}).concat([1]));
+  var kom=kl.length?'<div class="hbar">'+kl.map(function(k){
+    return '<div class="hrow"><div class="t"><b>'+esc(k)+'</b><span>Rp '+jt(km[k].n)+' jt &middot; '+nf(km[k].v)+' kg</span></div><div class="track"><i style="width:'+(km[k].n/kmax*100)+'%"></i></div></div>';
+  }).join('')+'</div>':'<p class="empty">Belum ada catatan panen.</p>';
+
+  var att=[];
+  db.izin.forEach(function(r){var d=daysUntil(r.tenggat);if(d<=14)att.push({t:d<0?'bad':'amb',v:'izin',x:r.nomor+' ('+r.pemegang+'): tenggat '+(d<0?'lewat '+(-d)+' hari':d+' hari lagi')+', tahap '+r.tahap+'.'});});
+  db.patroli.forEach(function(r){if(r.tingkat==='Tinggi'&&r.status!=='Selesai')att.push({t:'bad',v:'patroli',x:r.jenis+' di '+r.lokasi+' tingkat tinggi, status '+r.status.toLowerCase()+'.'});});
+  db.rencana.forEach(function(r){var p=pctRow(r);if(p<60)att.push({t:'amb',v:'rencana',x:r.kegiatan+' baru mencapai '+nf(p)+'% dari target.'});});
+  db.kawasan.forEach(function(r){if(r.kondisi==='Terdegradasi')att.push({t:'amb',v:'kawasan',x:r.nama+' berstatus terdegradasi dengan tutupan '+nf(r.tutupan)+'%.'});});
+  var attHTML=att.length?'<ul class="attn">'+att.slice(0,8).map(function(a){return '<li><span class="dot '+(a.t==='bad'?'bad':'')+'"></span><a href="#'+a.v+'">'+esc(a.x)+'</a></li>';}).join('')+'</ul>':'<p class="sub">Tidak ada hal yang perlu ditindaklanjuti.</p>';
+
+  return '<div class="head"><div><div class="eyebrow">Tahun kerja '+new Date().getFullYear()+'</div><h2>Ringkasan pengelolaan hutan</h2>'+
+    '<p>Gambaran produksi HHBK, kondisi kawasan, dan kemajuan rencana kerja dari data yang tercatat di sistem ini.</p></div></div>'+
+    '<div class="kpis">'+
+      '<div class="kpi"><span class="kl">Produksi HHBK</span><b class="kv">'+nf(vol)+'<small> kg</small></b><span class="ks">'+h.length+' catatan panen</span></div>'+
+      '<div class="kpi"><span class="kl">Nilai produksi</span><b class="kv">'+jt(nilai)+'<small> juta Rp</small></b><span class="ks">'+kl.length+' komoditas</span></div>'+
+      '<div class="kpi"><span class="kl">Luas kawasan</span><b class="kv">'+nf(luas)+'<small> ha</small></b><span class="ks">'+db.kawasan.length+' blok pengelolaan</span></div>'+
+      '<div class="kpi"><span class="kl">Izin aktif dipantau</span><b class="kv">'+db.izin.length+'</b><span class="ks">'+nf(sum(db.izin,'luas'))+' ha</span></div>'+
+    '</div>'+
+    '<div class="grid2">'+
+      '<section class="card"><h3>Nilai produksi per bulan</h3><p class="sub">Juta rupiah, semua komoditas</p>'+months+'</section>'+
+      '<section class="card"><h3>Nilai per komoditas</h3><p class="sub">Diurutkan dari nilai terbesar</p>'+kom+'</section>'+
+    '</div>'+
+    '<div class="grid2">'+
+      '<section class="card"><h3>Indeks pengelolaan hutan lestari</h3><p class="sub">Rata-rata empat aspek, skala 0 sampai 100</p>'+
+        '<div class="phl-top"><b>'+(idx==null?'-':nf(idx))+'</b><em>'+idxLabel+'</em></div>'+
+        '<div class="crit">'+crit.map(function(c){var v=c.v;return '<div><div class="hrow"><div class="t"><b>'+c.n+'</b><span>'+(v==null?'belum ada data':nf(v))+'</span></div><div class="track"><i class="'+(v==null?'':tonePct(v))+'" style="width:'+(v==null?0:v)+'%"></i></div></div><div class="d">'+c.d+'</div></div>';}).join('')+'</div>'+
+        '<p class="note">Indeks ini ringkasan peragaan dari data yang diisi di sistem, bukan penilaian resmi kinerja pengelolaan hutan lestari.</p></section>'+
+      '<section class="card"><h3>Perlu perhatian</h3><p class="sub">Tenggat izin, kejadian berat, dan kegiatan yang tertinggal</p>'+attHTML+'</section>'+
+    '</div>';
+}
+
+/* ---------- modul data ---------- */
+function columns(k){
+  var e=E[k],cols=[],byk={};
+  e.fields.forEach(function(f){byk[f.k]=f;});
+  var list=(e.order?e.order.map(function(x){return byk[x];}):e.fields).filter(function(f){return f.tbl;});
+  var comp=e.comp||[];
+  if(k==='hhbk'){list.forEach(function(f){cols.push({f:f});});comp.forEach(function(c){cols.push({c:c});});return cols;}
+  if(k==='rencana'){list.forEach(function(f){cols.push({f:f});});comp.forEach(function(c){cols.push({c:c});});return cols;}
+  list.forEach(function(f){cols.push({f:f});});
+  comp.forEach(function(c){cols.push({c:c});});
+  return cols;
+}
+function cell(f,r){
+  var v=r[f.k];
+  if(f.fmt==='num')return nf(v);
+  if(f.fmt==='rp')return rp(v);
+  if(f.fmt==='pct')return nf(v)+'%';
+  if(f.fmt==='date')return esc(fmtDate(v));
+  if(f.fmt==='badge')return badge(v);
+  return esc(v);
+}
+function entityHTML(k){
+  var e=E[k],st=ui[k];
+  var fld=e.fields.filter(function(f){return f.k===e.filter;})[0];
+  return '<div class="head"><div><div class="eyebrow">Modul</div><h2>'+esc(e.title)+'</h2><p>'+esc(e.desc)+'</p></div>'+
+    '<button class="btn pri" type="button" data-act="add" data-e="'+k+'">'+esc(e.add)+'</button></div>'+
+    '<div class="toolbar"><input type="search" id="q" placeholder="Cari di tabel" aria-label="Cari" value="'+esc(st.q)+'">'+
+    '<select id="fl" aria-label="Saring '+esc(fld.l)+'"><option value="">Semua '+esc(fld.l.toLowerCase())+'</option>'+
+    '</select></div>'+
+    '<div class="summary" id="sum"></div><div class="tw" id="tw"></div>';
+}
+function filterOpts(k){
+  var e=E[k],fld=e.fields.filter(function(f){return f.k===e.filter;})[0];
+  var vals;
+  if(fld.opts)vals=fld.opts;
+  else{vals=[];db[k].forEach(function(r){if(r[fld.k]&&vals.indexOf(r[fld.k])<0)vals.push(r[fld.k]);});vals.sort();}
+  return vals.map(function(v){return '<option value="'+esc(v)+'"'+(ui[k].f===v?' selected':'')+'>'+esc(v)+'</option>';}).join('');
+}
+function renderTable(k){
+  var e=E[k],st=ui[k],rows=db[k].slice();
+  if(e.sort)rows.sort(e.sort);
+  if(st.f)rows=rows.filter(function(r){return r[e.filter]===st.f;});
+  if(st.q){var q=st.q.toLowerCase();rows=rows.filter(function(r){return e.fields.some(function(f){return String(r[f.k]==null?'':r[f.k]).toLowerCase().indexOf(q)>=0;});});}
+  $('#sum').innerHTML=e.summary(rows);
+  var cols=columns(k);
+  var head='<tr>'+cols.map(function(c){var n=c.f?(c.f.fmt==='num'||c.f.fmt==='rp'||c.f.fmt==='pct'):c.c.n;return '<th'+(n?' class="n"':'')+'>'+esc(c.f?c.f.l.replace(/ \(.*\)/,''):c.c.l)+'</th>';}).join('')+'<th></th></tr>';
+  var body=rows.length?rows.map(function(r){
+    return '<tr>'+cols.map(function(c){
+      if(c.c)return '<td'+(c.c.n?' class="n"':'')+'>'+c.c.fn(r)+'</td>';
+      var f=c.f,n=(f.fmt==='num'||f.fmt==='rp'||f.fmt==='pct');
+      return '<td class="'+(n?'n':'')+(f.wrap?' wrap':'')+'">'+cell(f,r)+'</td>';
+    }).join('')+'<td class="act"><button class="btn sm" type="button" data-act="edit" data-e="'+k+'" data-id="'+r.id+'">Ubah</button>'+
+      '<button class="btn sm danger" type="button" data-act="del" data-e="'+k+'" data-id="'+r.id+'">Hapus</button></td></tr>';
+  }).join(''):'<tr><td colspan="'+(cols.length+1)+'" class="empty">Belum ada data yang cocok. Ubah pencarian atau tambah catatan baru.</td></tr>';
+  $('#tw').innerHTML='<table><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
+}
+
+/* ---------- render utama ---------- */
+function render(){
+  nav();
+  var m=$('#main');
+  if(ui.view==='dasbor'){m.innerHTML=dashHTML();}
+  else{
+    var k=ui.view;
+    m.innerHTML=entityHTML(k);
+    var sel=$('#fl');sel.insertAdjacentHTML('beforeend',filterOpts(k));
+    sel.value=ui[k].f;
+    renderTable(k);
+  }
+}
+function route(){
+  var h='';try{h=location.hash.replace('#','');}catch(e){}
+  ui.view=(h==='dasbor'||ORDER.indexOf(h)>=0)?h:'dasbor';
+  render();
+  window.scrollTo(0,0);
+}
+
+/* ---------- formulir ---------- */
+var editing=null;
+function fieldHTML(f,v,k){
+  var id='f_'+f.k,inp;
+  if(f.t==='select'){
+    inp='<select id="'+id+'" name="'+f.k+'">'+f.opts.map(function(o){return '<option'+(o===v?' selected':'')+'>'+esc(o)+'</option>';}).join('')+'</select>';
+  }else if(f.t==='textarea'){
+    inp='<textarea id="'+id+'" name="'+f.k+'">'+esc(v==null?'':v)+'</textarea>';
+  }else{
+    var type=f.t==='number'?'number':(f.t==='date'?'date':'text');
+    inp='<input id="'+id+'" name="'+f.k+'" type="'+type+'"'+(f.t==='number'?' min="0"'+(f.max?' max="'+f.max+'"':'')+' step="any" inputmode="decimal"':'')+
+      (f.list?' list="dl_'+f.k+'"':'')+' value="'+esc(v==null?'':v)+'" autocomplete="off">';
+    if(f.list)inp+='<datalist id="dl_'+f.k+'">'+f.list.map(function(o){return '<option value="'+esc(o)+'">';}).join('')+'</datalist>';
+  }
+  return '<div class="'+(f.full||f.t==='textarea'?'full':'')+'"><label for="'+id+'">'+esc(f.l)+(f.req?' <i>*</i>':'')+'</label>'+inp+'</div>';
+}
+function openForm(k,id){
+  var e=E[k],rec=id?db[k].filter(function(r){return r.id===id;})[0]:null;
+  editing={k:k,id:id||null};
+  $('#ftitle').textContent=(rec?'Ubah ':'Tambah ')+e.title.toLowerCase();
+  $('#fbody').innerHTML=e.fields.map(function(f){
+    var v=rec?rec[f.k]:(f.t==='date'?dayOff(0):(f.t==='select'?f.opts[0]:''));
+    return fieldHTML(f,v,k);
+  }).join('');
+  $('#ferr').textContent='';
+  $('#sheet').hidden=false;
+  var first=$('#fbody input,#fbody select');if(first)first.focus();
+}
+function closeForm(){$('#sheet').hidden=true;editing=null;}
+function submitForm(ev){
+  ev.preventDefault();
+  if(!editing)return;
+  var k=editing.k,e=E[k],rec={},err='';
+  e.fields.forEach(function(f){
+    var el=$('#f_'+f.k),v=el.value.trim();
+    if(f.req&&v===''&&!err)err='Isi kolom "'+f.l+'" terlebih dahulu.';
+    if(f.t==='number'){
+      var n=parseFloat(v);
+      if(v!==''&&(isNaN(n)||n<0)&&!err)err='Kolom "'+f.l+'" harus berupa angka nol atau lebih.';
+      if(f.max&&n>f.max&&!err)err='Kolom "'+f.l+'" tidak boleh lebih dari '+f.max+'.';
+      rec[f.k]=isNaN(n)?0:n;
+    }else rec[f.k]=v;
+  });
+  if(err){$('#ferr').textContent=err;return;}
+  if(editing.id){
+    var i=db[k].findIndex(function(r){return r.id===editing.id;});
+    rec.id=editing.id;db[k][i]=rec;
+  }else{rec.id=newId();db[k].push(rec);}
+  saveDb();closeForm();
+  if(ui.view===k){renderTable(k);nav();}else render();
+}
+
+/* ---------- aksi ---------- */
+var armTimer=null;
+function arm(btn,label,fn){
+  if(btn.dataset.armed==='1'){fn();return;}
+  btn.dataset.armed='1';
+  var old=btn.textContent;btn.textContent=label;btn.classList.add('armed');
+  clearTimeout(armTimer);
+  armTimer=setTimeout(function(){btn.dataset.armed='';btn.textContent=old;btn.classList.remove('armed');},3500);
+}
+document.addEventListener('click',function(ev){
+  var b=ev.target.closest('[data-act]');
+  if(!b)return;
+  var act=b.dataset.act;
+  if(act==='add')openForm(b.dataset.e);
+  else if(act==='edit')openForm(b.dataset.e,b.dataset.id);
+  else if(act==='close')closeForm();
+  else if(act==='del'){
+    arm(b,'Yakin hapus?',function(){
+      var k=b.dataset.e;
+      db[k]=db[k].filter(function(r){return r.id!==b.dataset.id;});
+      saveDb();renderTable(k);nav();
+    });
+  }
+  else if(act==='reset'){
+    arm(b,'Yakin? Data Anda diganti',function(){
+      db=seed();saveDb();b.dataset.armed='';b.textContent='Kembalikan data contoh';b.classList.remove('armed');render();
+    });
+  }
+});
+document.addEventListener('input',function(ev){
+  if(ev.target.id==='q'&&E[ui.view]){ui[ui.view].q=ev.target.value;renderTable(ui.view);}
+});
+document.addEventListener('change',function(ev){
+  if(ev.target.id==='fl'&&E[ui.view]){ui[ui.view].f=ev.target.value;renderTable(ui.view);}
+});
+document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&!$('#sheet').hidden)closeForm();});
+$('#form').addEventListener('submit',submitForm);
+window.addEventListener('hashchange',route);
+
+storeNote();
+route();
+})();
+</script>
